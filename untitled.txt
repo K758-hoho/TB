@@ -1,4 +1,4 @@
-/* Character Cards */
+//Character Cards
 document.querySelectorAll('.character-card').forEach(card => {
     card.addEventListener('click', () => {
         const profileImage = card.getAttribute('data-profile');
