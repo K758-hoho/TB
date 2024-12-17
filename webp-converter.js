@@ -1,5 +1,3 @@
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script>
 $(document).ready(function() {
     const convertToWebP = () => {
         // Target your specific comic structure
@@ -30,4 +28,3 @@ $(document).ready(function() {
 
     setTimeout(convertToWebP, 500);
 });
-</script>
