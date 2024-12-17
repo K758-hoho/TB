@@ -1,3 +1,34 @@
+/*Enable Font-Caching*/
+const fontCache = {
+    urls: [
+        "https://targetboskval.webcomic.ws/files/font/adler-font.woff2",
+        "https://targetboskval.webcomic.ws/files/font/special-elite-font.woff2",
+        "https://ka-f.fontawesome.com/releases/v6.7.1/webfonts/free-fa-solid-900.woff2",
+        "https://ka-f.fontawesome.com/releases/v6.7.1/webfonts/free-fa-brands-400.woff2",
+        "https://fonts.gstatic.com/s/nunito/v26/XRXV3I6Li01BKofIOOaBTMnFcQIG.woff2"
+    ],
+    init() {
+        this.urls.forEach(url => this.cacheFont(url));
+    },
+    async cacheFont(url) {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        localStorage.setItem(url, await this.blobToBase64(blob));
+    },
+    blobToBase64(blob) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    }
+};
+
+// Initialize caching
+fontCache.init();
+
+
 /*Scrollup Kofi*/
 kofiWidgetOverlay.draw('karinkho', {
     'type': 'floating-chat',
