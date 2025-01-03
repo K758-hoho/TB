@@ -281,7 +281,8 @@ function openLightbox(element) {
     const lightboxCaption = document.getElementById('lightbox-caption');
     
     lightbox.style.display = 'block';
-    lightboxImg.src = element.src;
+    // Use the full-size image URL stored in data-full-img
+    lightboxImg.src = element.getAttribute('data-full-img');
     lightboxCaption.textContent = element.nextElementSibling.textContent;
 }
 
