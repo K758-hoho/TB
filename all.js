@@ -274,6 +274,29 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+/*Popup Mechanism for the Hall of Tribute*/
+function openLightbox(element) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    
+    lightbox.style.display = 'block';
+    lightboxImg.src = element.src;
+    lightboxCaption.textContent = element.nextElementSibling.textContent;
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+}
+
+// Close lightbox when clicking outside the image
+document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeLightbox();
+    }
+});
+
+
 /*Drugs Database*/
 document.addEventListener("DOMContentLoaded", function() {
     const effectFilter = document.getElementById("effectFilter");
