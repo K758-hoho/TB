@@ -275,52 +275,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 /*Popup Mechanism for the Hall of Tribute*/
-document.addEventListener('DOMContentLoaded', function() {
-    // Test log
-    console.log('DOM loaded, initializing lightbox');
-    
-    // Select all gallery images
-    const galleryImages = document.querySelectorAll('.gallery-item img');
-    console.log('Found gallery images:', galleryImages.length);
-    
-    function openLightbox(element) {
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
-        const lightboxCaption = document.getElementById('lightbox-caption');
-        
-        console.log('Opening lightbox for image:', element.getAttribute('data-full-img'));
-        
-        lightboxImg.src = element.getAttribute('data-full-img');
-        lightboxCaption.textContent = element.nextElementSibling.textContent;
-        lightbox.style.display = 'block';
-    }
+window.addEventListener('DOMContentLoaded', function() {
+  const galleryImages = document.querySelectorAll('.gallery-item img');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxCaption = document.getElementById('lightbox-caption');
+  const closeButton = document.querySelector('.close');
 
-    function closeLightbox() {
-        const lightbox = document.getElementById('lightbox');
-        lightbox.style.display = 'none';
-    }
-
-    // Add click listeners to all gallery images
-    galleryImages.forEach(img => {
-        img.addEventListener('click', () => {
-            console.log('Image clicked');
-            openLightbox(img);
-        });
+  galleryImages.forEach(img => {
+    img.addEventListener('click', () => {
+      lightboxImg.src = img.getAttribute('data-full-img');
+      lightboxCaption.textContent = img.nextElementSibling.textContent;
+      lightbox.style.display = 'block';
     });
+  });
 
-    // Close lightbox when clicking outside the image
-    const lightbox = document.getElementById('lightbox');
-    lightbox.addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeLightbox();
-        }
-    });
+  lightbox.addEventListener('click', function(e) {
+    if (!e.target.closest('#lightbox-img, .close')) {
+      lightbox.style.display = 'none';
+    }
+  });
 
-    // Close button listener
-    const closeButton = document.querySelector('.close');
-    closeButton.addEventListener('click', closeLightbox);
+  closeButton.addEventListener('click', () => {
+    lightbox.style.display = 'none';
+  });
 });
-
 
 
 /*Drugs Database*/
