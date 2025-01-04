@@ -274,35 +274,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-/*Popup Mechanism for the Hall of Tribute*/
-document.querySelectorAll('.gallery-item img').forEach(img => {
-  img.addEventListener('click', () => {
-    const fullImg = img.getAttribute('data-full-img');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxCaption = document.getElementById('lightbox-caption');
-
-    lightboxImg.src = fullImg;
-    lightboxCaption.textContent = img.nextElementSibling.textContent;
-    lightbox.style.display = 'block';
-  });
-});
-
-window.addEventListener('DOMContentLoaded', function() {
-  const lightbox = document.getElementById('lightbox');
-  lightbox.addEventListener('click', function(e) {
-    if (!e.target.closest('#lightbox-img')) {
-      lightbox.style.display = 'none';
-    }
-  });
-
-  const closeButton = document.querySelector('.close');
-  closeButton.addEventListener('click', () => {
-    lightbox.style.display = 'none';
-  });
-});
-
-
 /*Drugs Database*/
 document.addEventListener("DOMContentLoaded", function() {
     const effectFilter = document.getElementById("effectFilter");
