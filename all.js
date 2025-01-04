@@ -275,27 +275,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 /*Popup Mechanism for the Hall of Tribute*/
-function openLightbox(element) {
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxCaption = document.getElementById('lightbox-caption');
-    
-    lightbox.style.display = 'block';
-    lightboxImg.src = element.getAttribute('data-full-img');
-    lightboxCaption.textContent = element.nextElementSibling.textContent;
-}
-
-function closeLightbox() {
-    document.getElementById('lightbox').style.display = 'none';
-}
-
 document.addEventListener('DOMContentLoaded', function() {
+    function openLightbox(element) {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+        
+        lightbox.style.display = 'block';
+        lightboxImg.src = element.getAttribute('data-full-img');
+        lightboxCaption.textContent = element.nextElementSibling.textContent;
+    }
+
+    function closeLightbox() {
+        document.getElementById('lightbox').style.display = 'none';
+    }
+
+    // Add click listeners to all gallery images
+    document.querySelectorAll('.gallery-item img').forEach(img => {
+        img.addEventListener('click', () => openLightbox(img));
+    });
+
     // Close lightbox when clicking outside the image
     document.getElementById('lightbox').addEventListener('click', function(e) {
         if (e.target === this) {
             closeLightbox();
         }
     });
+
+    // Close button listener
+    document.querySelector('.close').addEventListener('click', closeLightbox);
 });
 
 
