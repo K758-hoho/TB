@@ -275,36 +275,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 /*Popup Mechanism for the Hall of Tribute*/
-document.getElementsByClassName('gallery-item').forEach(function(item) {
-  item.addEventListener('click', function() {
-    var fullImg = this.querySelector('img').getAttribute('data-full-img');
-    var lightbox = document.getElementById('lightbox');
-    var lightboxImg = document.getElementById('lightbox-img');
-    var lightboxCaption = document.getElementById('lightbox-caption');
-
-    alert('Test'); // Verify event listener execution
-    console.log(fullImg, lightbox); // Log variables
+document.querySelectorAll('.gallery-item img').forEach(img => {
+  img.addEventListener('click', () => {
+    const fullImg = img.getAttribute('data-full-img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCaption = document.getElementById('lightbox-caption');
 
     lightboxImg.src = fullImg;
-    lightboxCaption.textContent = this.querySelector('.caption').textContent;
+    lightboxCaption.textContent = img.nextElementSibling.textContent;
     lightbox.style.display = 'block';
   });
 });
 
 window.addEventListener('DOMContentLoaded', function() {
-  var lightbox = document.getElementById('lightbox');
+  const lightbox = document.getElementById('lightbox');
   lightbox.addEventListener('click', function(e) {
     if (!e.target.closest('#lightbox-img')) {
       lightbox.style.display = 'none';
     }
   });
 
-  var closeButton = document.querySelector('.close');
-  closeButton.addEventListener('click', function() {
+  const closeButton = document.querySelector('.close');
+  closeButton.addEventListener('click', () => {
     lightbox.style.display = 'none';
   });
 });
-
 /*Drugs Database*/
 document.addEventListener("DOMContentLoaded", function() {
     const effectFilter = document.getElementById("effectFilter");
