@@ -284,21 +284,23 @@ window.addEventListener('DOMContentLoaded', function() {
 
   galleryImages.forEach(img => {
     img.addEventListener('click', () => {
+      lightbox.style.display = 'block';
       lightboxImg.src = img.getAttribute('data-full-img');
       lightboxCaption.textContent = img.nextElementSibling.textContent;
-      lightbox.style.display = 'block';
     });
   });
 
+  closeButton.addEventListener('click', closeLightbox);
+
   lightbox.addEventListener('click', function(e) {
     if (!e.target.closest('#lightbox-img, .close')) {
-      lightbox.style.display = 'none';
+      closeLightbox();
     }
   });
 
-  closeButton.addEventListener('click', () => {
+  function closeLightbox() {
     lightbox.style.display = 'none';
-  });
+  }
 });
 
 
