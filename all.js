@@ -275,32 +275,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 /*Popup Mechanism for the Hall of Tribute*/
-window.addEventListener('DOMContentLoaded', function() {
-  const galleryImages = document.querySelectorAll('.gallery-item img');
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightbox-img');
-  const lightboxCaption = document.getElementById('lightbox-caption');
-  const closeButton = document.querySelector('.close');
+document.querySelectorAll('.gallery-item img').forEach(img => {
+  img.addEventListener('click', () => {
+    const fullImg = img.getAttribute('data-full-img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCaption = document.getElementById('lightbox-caption');
 
-  galleryImages.forEach(img => {
-    img.addEventListener('click', () => {
-      lightbox.style.display = 'block';
-      lightboxImg.src = img.getAttribute('data-full-img');
-      lightboxCaption.textContent = img.nextElementSibling.textContent;
-    });
+    lightboxImg.src = fullImg;
+    lightboxCaption.textContent = img.nextElementSibling.textContent;
+    lightbox.style.display = 'block';
   });
+});
 
-  closeButton.addEventListener('click', closeLightbox);
-
+window.addEventListener('DOMContentLoaded', function() {
+  const lightbox = document.getElementById('lightbox');
   lightbox.addEventListener('click', function(e) {
-    if (!e.target.closest('#lightbox-img, .close')) {
-      closeLightbox();
+    if (!e.target.closest('#lightbox-img')) {
+      lightbox.style.display = 'none';
     }
   });
 
-  function closeLightbox() {
+  const closeButton = document.querySelector('.close');
+  closeButton.addEventListener('click', () => {
     lightbox.style.display = 'none';
-  }
+  });
 });
 
 
