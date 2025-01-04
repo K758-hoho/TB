@@ -301,6 +301,8 @@ window.addEventListener('DOMContentLoaded', function() {
     lightbox.style.display = 'none';
   });
 });
+
+
 /*Drugs Database*/
 document.addEventListener("DOMContentLoaded", function() {
     const effectFilter = document.getElementById("effectFilter");
