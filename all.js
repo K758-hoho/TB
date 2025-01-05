@@ -275,25 +275,28 @@ document.addEventListener("DOMContentLoaded", function() {
     const ingredientFilter = document.getElementById("ingredientFilter");
     const drugCards = document.querySelectorAll(".drug-card");
 
-    function filterDrugs() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const effectValue = effectFilter.value;
-        const ingredientValue = ingredientFilter.value;
+    // Only proceed if all required elements are found
+    if (searchInput && effectFilter && ingredientFilter) {
+        function filterDrugs() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const effectValue = effectFilter.value;
+            const ingredientValue = ingredientFilter.value;
 
-        drugCards.forEach(card => {
-            const title = card.querySelector("h2").textContent.toLowerCase();
-            const effects = card.dataset.effects.split(",");
-            const ingredients = card.dataset.ingredients.split(",");
+            drugCards.forEach(card => {
+                const title = card.querySelector("h2").textContent.toLowerCase();
+                const effects = card.dataset.effects.split(",");
+                const ingredients = card.dataset.ingredients.split(",");
 
-            const matchesSearch = title.includes(searchTerm);
-            const matchesEffect = !effectValue || effects.includes(effectValue);
-            const matchesIngredient = !ingredientValue || ingredients.includes(ingredientValue);
+                const matchesSearch = title.includes(searchTerm);
+                const matchesEffect = !effectValue || effects.includes(effectValue);
+                const matchesIngredient = !ingredientValue || ingredients.includes(ingredientValue);
 
-            card.style.display = (matchesSearch && matchesEffect && matchesIngredient) ? "block" : "none";
-        });
+                card.style.display = (matchesSearch && matchesEffect && matchesIngredient) ? "block" : "none";
+            });
+        }
+
+        searchInput.addEventListener("input", filterDrugs);
+        effectFilter.addEventListener("change", filterDrugs);
+        ingredientFilter.addEventListener("change", filterDrugs);
     }
-
-    searchInput.addEventListener("input", filterDrugs);
-    effectFilter.addEventListener("change", filterDrugs);
-    ingredientFilter.addEventListener("change", filterDrugs);
 });
