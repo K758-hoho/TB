@@ -36,16 +36,17 @@ setTimeout(() => {
 /*Responsove Navbar with X*/
 function myFunction() {
     var x = document.getElementById("myTopnav");
-    var icon = document.getElementById("navIcon");
+    var menuIcon = document.getElementById("menu-icon");
+    var xIcon = document.getElementById("x-icon");
     
     if (!x.classList.contains("responsive")) {
         x.classList.add("responsive");
-        icon.classList.remove("fa-bars");
-        icon.classList.add("fa-xmark");
+        menuIcon.style.display = "none";
+        xIcon.style.display = "block";
     } else {
         x.classList.remove("responsive");
-        icon.classList.remove("fa-xmark");
-        icon.classList.add("fa-bars");
+        menuIcon.style.display = "block";
+        xIcon.style.display = "none";
     }
 }
 
