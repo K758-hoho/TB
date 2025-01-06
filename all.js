@@ -33,7 +33,7 @@ setTimeout(() => {
 }, 1000);
 
 
-/*Responsove Navbar with X*/
+/*Responsive Navbar with X*/
 function myFunction() {
     var x = document.getElementById("myTopnav");
     var icon = document.getElementById("navIcon");
