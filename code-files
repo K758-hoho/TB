@@ -1,0 +1,194 @@
+importScripts('https://cdn.jsdelivr.net/npm/workbox-sw@7.3.0/build/workbox-sw.min.js');
+
+workbox.setConfig({ debug: true });
+
+const CACHE_VERSION = 'v1';
+const ASSETS_TO_CACHE = [
+  { url: 'https://targetboskval.webcomic.ws/files/criminalprofile/deyu_%281%29.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/criminalprofile/nyathera_%281%29.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/criminalprofile/rikki_%281%29.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/criminalprofile/janberk_%281%29.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/criminalprofile/tapio_%281%29.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/font/adler-font.woff2', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/font/special-elite-font.woff2', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/font/fa-brands-400.woff2', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/font/fa-regular-400.woff2', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/font/fa-solid-900.woff2', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/avatar/karin-kho1.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/comicnavigation/initial.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/icons/chevron-down.svg', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/icons/menu-24px.svg', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/comicnavigation/resume.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/comicnavigation/latest.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/comicnavigation/arrow_to_first.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/comicnavigation/arrow_to_latest.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/comicnavigation/next.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/comicnavigation/previous.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/tribute/mini-maxmidoriya.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/tribute/maximus_midoriya.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/comicfury-icons/gator-icon-white.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/bannerimages/white_target_boskval_banner.webp', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/background/old-paper.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/white_target_boskval_banner%20(2).webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/deyu-photo%20233x270.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/janberk-photo%20233x270.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/nyathera-photo%20233x270.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/rikki-photo%20233x270.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/tapio-photo%20233x270.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/herosection_920x.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/herosection_1400x.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/herosection_1750x.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/herosection_2048.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/websitebg1-330x587.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/websitebg1-693x1232.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/websitebg1-910x1618.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/websitebg1-1080x1920.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/karin-kho1.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/all.min.js', revision: '1.0' },
+  { url: 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js', revision: '1.0' },
+  { url: 'https://storage.ko-fi.com/cdn/scripts/floating-chat-wrapper.css', revision: '1.0' },
+  { url: 'https://storage.ko-fi.com/cdn/cup-border.png', revision: '1.0' },
+  { url: 'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js', revision: '1.0' },
+];
+
+workbox.precaching.precacheAndRoute(ASSETS_TO_CACHE.map(asset => ({
+  url: asset.url,
+  revision: asset.revision
+})), { 
+  cacheId: `my-cache-${CACHE_VERSION}`
+});
+
+// Cache all ComicFury comic images
+workbox.routing.registerRoute(
+  ({ url }) => url.origin === 'https://img.comicfury.com' && url.pathname.includes('/comics/'), 
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: `comic-images-${CACHE_VERSION}`,
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 1000,
+        maxAgeSeconds: 30 * 24 * 60 * 60 // 30 days
+      }),
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200]
+      }),
+      {
+        cacheDidUpdate: async ({ cacheName, request, oldResponse, newResponse }) => {
+          console.log(`Cached comic image: ${request.url}`);
+        }
+      }
+    ]
+  })
+);
+    
+// Cache fonts
+workbox.routing.registerRoute(
+  ({ request }) => request.destination === 'font',
+  new workbox.strategies.CacheFirst({
+    cacheName: `fonts-${CACHE_VERSION}`,
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 10,
+        maxAgeSeconds: 60 * 24 * 60 * 60, // 60 days
+      }),
+    ],
+  })
+);
+
+// Cache SVG files
+workbox.routing.registerRoute(
+  ({ url }) => url.pathname.endsWith('.svg'),
+  new workbox.strategies.CacheFirst({
+    cacheName: `svg-files-${CACHE_VERSION}`,
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({ maxAgeSeconds: 60 * 24 * 60 * 60 }), // 60 days
+      new workbox.cacheableResponse.CacheableResponsePlugin({ statuses: [0, 200] }),
+    ],
+  })
+);
+
+// Cache CDN-hosted Javascript files
+workbox.routing.registerRoute(
+  ({ url }) => url.origin === 'https://cdn.jsdelivr.net' && url.pathname.endsWith('.js'), 
+  new workbox.strategies.StaleWhileRevalidate({ 
+    cacheName: `cdn-js-resources-${CACHE_VERSION}`, 
+    plugins: [ 
+      new workbox.expiration.ExpirationPlugin({ 
+        maxAgeSeconds: 24 * 60 * 60, // 1 day 
+      }), 
+      {
+        cacheDidUpdate: async ({ cacheName, request, oldResponse, newResponse }) => { 
+          console.log(`Cached JS resource: ${request.url}`); 
+        } 
+      } 
+    ], 
+  }) 
+);
+
+// Cache CDN-hosted images
+workbox.routing.registerRoute(
+  ({ url }) => url.origin === 'https://cdn.jsdelivr.net' && (url.pathname.endsWith('.jpg') || url.pathname.endsWith('.jpeg') || url.pathname.endsWith('.png') || url.pathname.endsWith('.webp') || url.pathname.endsWith('.gif')), 
+  new workbox.strategies.CacheFirst({ 
+    cacheName: `cdn-image-resources-${CACHE_VERSION}`, 
+    plugins: [ 
+      new workbox.expiration.ExpirationPlugin({ 
+        maxAgeSeconds: 365 * 24 * 60 * 60, // 1 year 
+      }), 
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+    ],
+  })
+);
+
+// Cache website-hosted images
+workbox.routing.registerRoute(
+  ({ url }) => url.origin === 'https://targetboskval.webcomic.ws' && (url.pathname.endsWith('.jpg') || url.pathname.endsWith('.jpeg') || url.pathname.endsWith('.png') || url.pathname.endsWith('.webp') || url.pathname.endsWith('.gif')),
+  new workbox.strategies.CacheFirst({
+    cacheName: `website-image-resources-${CACHE_VERSION}`,
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxAgeSeconds: 365 * 24 * 60 * 60, // 1 year
+      }),
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+    ],
+  })
+);
+
+// Error handling for fetch events 
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request).catch(error => {
+        console.error('Fetching failed:', error); 
+        throw error;
+      });
+    }) 
+  ); 
+});
+
+// Cleanup old caches during the activate event 
+self.addEventListener('activate', event => { 
+  const cacheWhitelist = [
+    `my-cache-${CACHE_VERSION}`, 
+    `comic-images-${CACHE_VERSION}`, 
+    `fonts-${CACHE_VERSION}`, 
+    `svg-files-${CACHE_VERSION}`, 
+    `cdn-js-resources-${CACHE_VERSION}`, 
+    `cdn-image-resources-${CACHE_VERSION}`, 
+    `website-image-resources-${CACHE_VERSION}`
+  ]; 
+  event.waitUntil( 
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (!cacheWhitelist.includes(cacheName)) {
+            console.log(`Deleting old cache: ${cacheName}`);
+            return caches.delete(cacheName); 
+          }
+        })
+      ); 
+    })
+  ); 
+});
