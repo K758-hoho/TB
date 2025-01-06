@@ -213,18 +213,24 @@ window.addEventListener('DOMContentLoaded', function() {
 window.onload = function() {
     let progressBar = document.querySelector('.progress-bar');
     let comicTitleBox = document.querySelector('#comic-title-box');
-
+    
     if (progressBar && comicTitleBox) {
         window.addEventListener('scroll', () => {
             let titleBoxRect = comicTitleBox.getBoundingClientRect();
+            let totalHeight = comicTitleBox.offsetHeight;
             let windowHeight = window.innerHeight;
-            let progress = 0;
-
-            if (titleBoxRect.top <= 0) {
-                let visibleHeight = Math.min(titleBoxRect.bottom, windowHeight);
-            }
-
+            
+            // Calculate how much of the comic has been scrolled
+            let scrolled = -titleBoxRect.top;
+            let scrollableDistance = totalHeight - windowHeight;
+            
+            // Calculate progress percentage
+            let progress = (scrolled / scrollableDistance) * 100;
+            
+            // Ensure progress stays between 0 and 100
             progress = Math.min(Math.max(progress, 0), 100);
+            
+            // Update progress bar width
             progressBar.style.width = progress + '%';
         });
     }
