@@ -13,7 +13,7 @@ const ASSETS_TO_CACHE = [
   { url: 'https://targetboskval.webcomic.ws/files/font/special-elite-font.woff2', revision: '1.0' },
   { url: 'https://targetboskval.webcomic.ws/files/webfonts/fa-brands-400.woff2', revision: '1.0' },
   { url: 'https://targetboskval.webcomic.ws/files/webfonts/fa-regular-400.woff2', revision: '1.0' },
-  { url: 'https://targetboskval.webcomic.ws/files/webfonts/fa-solid-900.woff2"', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/webfonts/fa-solid-900.woff2', revision: '1.0' },
   { url: 'https://targetboskval.webcomic.ws/files/avatar/karin-kho1.webp', revision: '1.0' },
   { url: 'https://targetboskval.webcomic.ws/files/comicnavigation/initial.webp', revision: '1.0' },
   { url: 'https://targetboskval.webcomic.ws/files/icons/chevron-down.svg', revision: '1.0' },
