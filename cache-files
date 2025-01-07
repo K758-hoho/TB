@@ -52,9 +52,9 @@ const ASSETS_TO_CACHE = [
   { url: 'https://storage.ko-fi.com/cdn/cup-border.png', revision: '1.0' },
   { url: 'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js', revision: '1.0' },
   { url: 'https://targetboskval.webcomic.ws/offline/', revision: '1.0' },
-  { url: 'https://targetboskval.webcomic.ws/', revision: '1.0'}
+  { url: 'https://targetboskval.webcomic.ws/', revision: '1.0' },
   { url: 'https://targetboskval.webcomic.ws/files/offline/offline-v3.html', revision: '1.0' },
-  { url: 'https://targetboskval.webcomic.ws/files/offline/overview-page-v1.html', revision: '1.0' }.
+  { url: 'https://targetboskval.webcomic.ws/files/offline/overview-page-v1.html', revision: '1.0' },
   { url: 'https://targetboskval.webcomic.ws/files/offline/offline-css.css', revision: '1.0' }
 ];
 
@@ -88,7 +88,7 @@ workbox.routing.registerRoute(
   })
 );
 
-//Cache HTML files
+// Cache HTML files
 workbox.routing.registerRoute(
   ({ request }) => request.destination === 'document',
   new workbox.strategies.NetworkFirst({
@@ -105,7 +105,7 @@ workbox.routing.registerRoute(
   })
 );
 
-//Cache font files
+// Cache font files
 workbox.routing.registerRoute(
   ({ request }) => request.destination === 'font',
   new workbox.strategies.CacheFirst({
@@ -119,6 +119,7 @@ workbox.routing.registerRoute(
   })
 );
 
+//Cache all images
 workbox.routing.registerRoute(
   ({ url }) => 
     (url.origin === 'https://cdn.jsdelivr.net' || url.origin === 'https://targetboskval.webcomic.ws') &&
@@ -136,6 +137,7 @@ workbox.routing.registerRoute(
   })
 );
 
+//Cache CDN-hosted Javascript files
 workbox.routing.registerRoute(
   ({ url }) => url.origin === 'https://cdn.jsdelivr.net' && url.pathname.endsWith('.js'), 
   new workbox.strategies.StaleWhileRevalidate({ 
