@@ -13,7 +13,6 @@ const CACHE_VERSION = 'v5';
 const CACHE_NAMES = {
   main: `my-cache-${CACHE_VERSION}`,
   comics: `comic-images-${CACHE_VERSION}`,
-  html: `html-pages-${CACHE_VERSION}`,
   fonts: `fonts-${CACHE_VERSION}`,
   images: `image-resources-${CACHE_VERSION}`,
   cdn: `cdn-js-resources-${CACHE_VERSION}`,
@@ -76,7 +75,7 @@ const ASSETS_TO_CACHE = [
   { url: 'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js', revision: '1.0' },
 ];
 
-// Precache the assets and offline page
+// Precache the assets
 workbox.precaching.precacheAndRoute(ASSETS_TO_CACHE.map(asset => ({
   url: asset.url,
   revision: asset.revision
