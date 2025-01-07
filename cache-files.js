@@ -8,7 +8,7 @@ importScripts('https://cdn.jsdelivr.net/npm/workbox-cacheable-response@7.3.0/bui
 
 workbox.setConfig({ debug: true });
 
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v5';
 
 const CACHE_NAMES = {
   main: `my-cache-${CACHE_VERSION}`,
@@ -69,9 +69,6 @@ const ASSETS_TO_CACHE = [
   { url: 'https://storage.ko-fi.com/cdn/scripts/floating-chat-wrapper.css', revision: '1.0' },
   { url: 'https://storage.ko-fi.com/cdn/cup-border.png', revision: '1.0' },
   { url: 'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js', revision: '1.0' },
-  { url: 'https://targetboskval.webcomic.ws/files/offline/offline-v3.html', revision: '1.0' },
-  { url: 'https://targetboskval.webcomic.ws/files/offline/overview-page-v1.html', revision: '1.0' },
-  { url: 'https://targetboskval.webcomic.ws/files/offline/offline-css.css', revision: '1.0' }
 ];
 
 // Precache the assets and offline page
@@ -196,19 +193,6 @@ workbox.routing.registerRoute(
     ], 
   }) 
 );
-
-// Fetch event to serve offline page when network is unavailable
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request).then(response => {
-      if (response) {
-        return response;
-      } else if (event.request.headers.get('accept').includes('text/html')) {
-        return caches.match(OFFLINE_URL);
-      }
-    }))
-  );
-});
 
 // Cleanup old caches during the activate event 
 self.addEventListener('activate', event => {
