@@ -20,8 +20,6 @@ const CACHE_NAMES = {
   workbox: `workbox-libraries-${CACHE_VERSION}`
 };
 
-const OFFLINE_URL = 'https://targetboskval.webcomic.ws/files/offline/offline-v3.html';
-
 const ASSETS_TO_CACHE = [
   { url: 'https://targetboskval.webcomic.ws/files/criminalprofile/deyu_%281%29.webp', revision: '1.0' },
   { url: 'https://targetboskval.webcomic.ws/files/criminalprofile/nyathera_%281%29.webp', revision: '1.0' },
@@ -64,6 +62,13 @@ const ASSETS_TO_CACHE = [
   { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/websitebg1-910x1618.webp', revision: '1.0' },
   { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/websitebg1-1080x1920.webp', revision: '1.0' },
   { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/karin-kho1.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/npm/workbox-sw@7.3.0/build/workbox-sw.min.js', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/npm/workbox-core@7.3.0/build/workbox-core.prod.js', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/npm/workbox-routing@7.3.0/build/workbox-routing.prod.js', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/npm/workbox-strategies@7.3.0/build/workbox-strategies.prod.js', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/npm/workbox-precaching@7.3.0/build/workbox-precaching.prod.js', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/npm/workbox-expiration@7.3.0/build/workbox-expiration.prod.js', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/npm/workbox-cacheable-response@7.3.0/build/workbox-cacheable-response.prod.js', revision: '1.0' },
   { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/all.js', revision: '1.0' },
   { url: 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js', revision: '1.0' },
   { url: 'https://storage.ko-fi.com/cdn/scripts/floating-chat-wrapper.css', revision: '1.0' },
@@ -124,23 +129,6 @@ workbox.routing.registerRoute(
         }
       }
     ]
-  })
-);
-
-// Cache HTML files
-workbox.routing.registerRoute(
-  ({ request }) => request.destination === 'document',
-  new workbox.strategies.NetworkFirst({
-    cacheName: `html-pages-${CACHE_VERSION}`,
-    plugins: [
-      new workbox.expiration.ExpirationPlugin({
-        maxEntries: 50,
-        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
-      }),
-      new workbox.cacheableResponse.CacheableResponsePlugin({
-        statuses: [0, 200],
-      }),
-    ],
   })
 );
 
