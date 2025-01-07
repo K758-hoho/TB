@@ -3,6 +3,8 @@ importScripts('https://cdn.jsdelivr.net/npm/workbox-sw@7.3.0/build/workbox-sw.mi
 workbox.setConfig({ debug: true });
 
 const CACHE_VERSION = 'v1';
+const OFFLINE_URL = 'https://targetboskval.webcomic.ws/offline/';
+
 const ASSETS_TO_CACHE = [
   { url: 'https://targetboskval.webcomic.ws/files/criminalprofile/deyu_%281%29.webp', revision: '1.0' },
   { url: 'https://targetboskval.webcomic.ws/files/criminalprofile/nyathera_%281%29.webp', revision: '1.0' },
@@ -49,6 +51,9 @@ const ASSETS_TO_CACHE = [
   { url: 'https://storage.ko-fi.com/cdn/scripts/floating-chat-wrapper.css', revision: '1.0' },
   { url: 'https://storage.ko-fi.com/cdn/cup-border.png', revision: '1.0' },
   { url: 'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/offline/', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/offline/offline.html', revision: '1.0' },
+  { url: 'https://targetboskval.webcomic.ws/files/offline/offline-css.css', revision: '1.0' }
 ];
 
 workbox.precaching.precacheAndRoute(ASSETS_TO_CACHE.map(asset => ({
@@ -79,7 +84,24 @@ workbox.routing.registerRoute(
     ]
   })
 );
-    
+
+// Cache HTML pages
+workbox.routing.registerRoute(
+  ({ request }) => request.destination === 'document',
+  new workbox.strategies.CacheFirst({
+    cacheName: `html-pages-${CACHE_VERSION}`,
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+      }),
+      new workbox.cacheableResponse.CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+    ],
+  })
+);
+
 // Cache fonts
 workbox.routing.registerRoute(
   ({ request }) => request.destination === 'font',
@@ -130,17 +152,19 @@ workbox.routing.registerRoute(
   }) 
 );
 
-// Error handling for fetch events 
+// Fetch event to serve offline page when network is unavailable
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request).catch(error => {
-        console.error('Fetching failed:', error); 
-        throw error;
-      });
-    }) 
-  ); 
+    fetch(event.request).catch(() => caches.match(event.request).then(response => {
+      if (response) {
+        return response;
+      } else if (event.request.headers.get('accept').includes('text/html')) {
+        return caches.match(OFFLINE_URL);
+      }
+    }))
+  );
 });
+
 
 // Cleanup old caches during the activate event 
 self.addEventListener('activate', event => { 
