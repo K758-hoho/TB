@@ -36,7 +36,7 @@ setTimeout(() => {
 /*Responsive Navbar with X*/
 function myFunction() {
     var x = document.getElementById("myTopnav");
-    var icon = document.getElementById("n avIcon");
+    var icon = document.getElementById("navIcon");
     
     if (!x.classList.contains("responsive")) {
         x.classList.add("responsive");
