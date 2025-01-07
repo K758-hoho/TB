@@ -35,13 +35,14 @@ setTimeout(() => {
 
 /*Responsive Navbar with X*/
 function myFunction() {
+    var x = document.getElementById("myTopnav");
+    var icon = document.getElementById("navIcon");
+    
     if (!x.classList.contains("responsive")) {
         x.classList.add("responsive");
-        icon.src = "/files/icons/x-24px.svg";
         icon.src = "https://targetboskval.webcomic.ws/files/icons/x-24px.svg";
     } else {
         x.classList.remove("responsive");
-        icon.src = "/files/icons/menu-24px.svg";
         icon.src = "https://targetboskval.webcomic.ws/files/icons/menu-24px.svg";
     }
 }
