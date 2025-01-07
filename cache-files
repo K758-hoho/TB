@@ -2,7 +2,7 @@ importScripts('https://cdn.jsdelivr.net/npm/workbox-sw@7.3.0/build/workbox-sw.mi
 
 workbox.setConfig({ debug: true });
 
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const OFFLINE_URL = 'https://targetboskval.webcomic.ws/offline/';
 
 const ASSETS_TO_CACHE = [
@@ -56,6 +56,7 @@ const ASSETS_TO_CACHE = [
   { url: 'https://targetboskval.webcomic.ws/files/offline/offline-css.css', revision: '1.0' }
 ];
 
+// Precache the assets and offline page
 workbox.precaching.precacheAndRoute(ASSETS_TO_CACHE.map(asset => ({
   url: asset.url,
   revision: asset.revision
@@ -63,7 +64,7 @@ workbox.precaching.precacheAndRoute(ASSETS_TO_CACHE.map(asset => ({
   cacheId: `my-cache-${CACHE_VERSION}`
 });
 
-// Cache all ComicFury comic images
+// Cache strategies
 workbox.routing.registerRoute(
   ({ url }) => url.origin === 'https://img.comicfury.com' && url.pathname.includes('/comics/'), 
   new workbox.strategies.StaleWhileRevalidate({
@@ -85,10 +86,10 @@ workbox.routing.registerRoute(
   })
 );
 
-// Cache HTML pages
+//Cache HTML files
 workbox.routing.registerRoute(
   ({ request }) => request.destination === 'document',
-  new workbox.strategies.CacheFirst({
+  new workbox.strategies.NetworkFirst({
     cacheName: `html-pages-${CACHE_VERSION}`,
     plugins: [
       new workbox.expiration.ExpirationPlugin({
@@ -102,7 +103,7 @@ workbox.routing.registerRoute(
   })
 );
 
-// Cache fonts
+//Cache font files
 workbox.routing.registerRoute(
   ({ request }) => request.destination === 'font',
   new workbox.strategies.CacheFirst({
@@ -116,7 +117,6 @@ workbox.routing.registerRoute(
   })
 );
 
-// Consolidated cache strategy for images
 workbox.routing.registerRoute(
   ({ url }) => 
     (url.origin === 'https://cdn.jsdelivr.net' || url.origin === 'https://targetboskval.webcomic.ws') &&
@@ -134,7 +134,6 @@ workbox.routing.registerRoute(
   })
 );
 
-// Cache CDN-hosted Javascript files
 workbox.routing.registerRoute(
   ({ url }) => url.origin === 'https://cdn.jsdelivr.net' && url.pathname.endsWith('.js'), 
   new workbox.strategies.StaleWhileRevalidate({ 
@@ -165,16 +164,15 @@ self.addEventListener('fetch', event => {
   );
 });
 
-
 // Cleanup old caches during the activate event 
 self.addEventListener('activate', event => { 
   const cacheWhitelist = [
     `my-cache-${CACHE_VERSION}`, 
     `comic-images-${CACHE_VERSION}`, 
+    `html-pages-${CACHE_VERSION}`,
     `fonts-${CACHE_VERSION}`, 
-    `svg-files-${CACHE_VERSION}`, 
-    `cdn-js-resources-${CACHE_VERSION}`, 
     `image-resources-${CACHE_VERSION}`, 
+    `cdn-js-resources-${CACHE_VERSION}`
   ]; 
   event.waitUntil( 
     caches.keys().then(cacheNames => {
