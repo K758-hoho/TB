@@ -8,7 +8,7 @@ importScripts('https://cdn.jsdelivr.net/npm/workbox-cacheable-response@7.3.0/bui
 
 workbox.setConfig({ debug: true });
 
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v4';
 
 const CACHE_NAMES = {
   main: `my-cache-${CACHE_VERSION}`,
@@ -20,7 +20,7 @@ const CACHE_NAMES = {
   workbox: `workbox-libraries-${CACHE_VERSION}`
 };
 
-const OFFLINE_URL = 'https://targetboskval.webcomic.ws/offline/';
+const OFFLINE_URL = 'https://targetboskval.webcomic.ws/files/offline/offline-v3.html';
 
 const ASSETS_TO_CACHE = [
   { url: 'https://targetboskval.webcomic.ws/files/criminalprofile/deyu_%281%29.webp', revision: '1.0' },
@@ -69,8 +69,6 @@ const ASSETS_TO_CACHE = [
   { url: 'https://storage.ko-fi.com/cdn/scripts/floating-chat-wrapper.css', revision: '1.0' },
   { url: 'https://storage.ko-fi.com/cdn/cup-border.png', revision: '1.0' },
   { url: 'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js', revision: '1.0' },
-  { url: 'https://targetboskval.webcomic.ws/offline/', revision: '1.0' },
-  { url: 'https://targetboskval.webcomic.ws/', revision: '1.0' },
   { url: 'https://targetboskval.webcomic.ws/files/offline/offline-v3.html', revision: '1.0' },
   { url: 'https://targetboskval.webcomic.ws/files/offline/overview-page-v1.html', revision: '1.0' },
   { url: 'https://targetboskval.webcomic.ws/files/offline/offline-css.css', revision: '1.0' }
@@ -214,13 +212,24 @@ self.addEventListener('fetch', event => {
 
 // Cleanup old caches during the activate event 
 self.addEventListener('activate', event => {
-  const cacheWhitelist = Object.values(CACHE_NAMES);
+  const currentCacheNames = Object.values(CACHE_NAMES);
   
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (!cacheWhitelist.includes(cacheName)) {
+          // Only delete caches that start with our cache prefixes but aren't in the current version
+          const isOurCache = cacheName.startsWith('my-cache-') ||
+                           cacheName.startsWith('comic-images-') ||
+                           cacheName.startsWith('html-pages-') ||
+                           cacheName.startsWith('fonts-') ||
+                           cacheName.startsWith('image-resources-') ||
+                           cacheName.startsWith('cdn-js-resources-') ||
+                           cacheName.startsWith('workbox-libraries-');
+                           
+          const isOldVersion = !currentCacheNames.includes(cacheName);
+          
+          if (isOurCache && isOldVersion) {
             console.log(`Deleting old cache: ${cacheName}`);
             return caches.delete(cacheName);
           }
