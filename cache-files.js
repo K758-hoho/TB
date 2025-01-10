@@ -70,6 +70,8 @@ const ASSETS_TO_CACHE = [
   { url: 'https://storage.ko-fi.com/cdn/scripts/floating-chat-wrapper.css', revision: '1.0' },
   { url: 'https://storage.ko-fi.com/cdn/cup-border.png', revision: '1.0' },
   { url: 'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js', revision: '1.0' },
+  { url: 'https://www.comicad.net/r/DMp0jCnYVt/', revision: '1.0' },
+  { url: 'https://www.comicad.net/r/hR77WQ2RWo/', revision: '1.0' },
 ];
 
 // Precache the assets
@@ -145,12 +147,13 @@ workbox.routing.registerRoute(
 //Cache all images
 workbox.routing.registerRoute(
   ({ url }) => 
-    (url.origin === 'https://cdn.jsdelivr.net' || url.origin === 'https://targetboskval.webcomic.ws') &&
+    (url.origin === 'https://cdn.jsdelivr.net' || url.origin === 'https://targetboskval.webcomic.ws') && 
     (url.pathname.endsWith('.jpg') || url.pathname.endsWith('.jpeg') || url.pathname.endsWith('.png') || url.pathname.endsWith('.webp') || url.pathname.endsWith('.svg')),
   new workbox.strategies.CacheFirst({
     cacheName: `image-resources-${CACHE_VERSION}`,
     plugins: [
       new workbox.expiration.ExpirationPlugin({
+        maxEntries: 40,
         maxAgeSeconds: 365 * 24 * 60 * 60, // 1 year
       }),
       new workbox.cacheableResponse.CacheableResponsePlugin({
