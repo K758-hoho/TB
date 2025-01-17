@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-/*Hero-section BG*/
+/*Topnav BG change*/
 document.addEventListener('DOMContentLoaded', function() {
     const nav = document.getElementById('myTopnav');
     const heroSection = document.querySelector('.hero-section');
@@ -76,8 +76,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateNavBackground() {
         const scrollPosition = window.scrollY;
 
+        // Check if heroSection exists and handle its background color logic
         if (heroSection) {
             const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+
             if (scrollPosition > heroBottom) {
                 nav.style.backgroundColor = '#300000';
             } else {
@@ -85,11 +87,25 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        // Check if comicSection exists and handle its background color logic
         if (comicSection) {
             const comicTop = comicSection.offsetTop;
             const comicBottom = comicTop + comicSection.offsetHeight;
+
             if (scrollPosition >= comicTop && scrollPosition < comicBottom) {
                 nav.style.backgroundColor = 'black';
+            } else {
+                // Ensure it reverts to previous logic when out of comic section
+                if (heroSection) {
+                    const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+                    if (scrollPosition > heroBottom) {
+                        nav.style.backgroundColor = '#300000';
+                    } else {
+                        nav.style.backgroundColor = '#550000';
+                    }
+                } else {
+                    nav.style.backgroundColor = '#300000'; // Default color for pages without hero section
+                }
             }
         }
     }
