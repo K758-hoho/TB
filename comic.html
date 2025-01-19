@@ -3509,76 +3509,6 @@ footer li:last-of-type {
                     
                 </div>     
             
-
-        <div class="share-container">
-          <button class="share-button" onclick="toggleShare()" data-tooltip="Share this page">
-            <i class="fa-solid fa-share-from-square"></i>
-          </button>
-          <div class="share-options" id="shareOptions">
-            <a onclick="shareOnWhatsApp()">
-                <i class="fab fa-whatsapp"></i>
-                <span>Share on WhatsApp</span>
-            </a>
-            <a onclick="shareOnTelegram()">
-                <i class="fab fa-telegram"></i>
-                <span>Share on Telegram</span>
-            </a>
-            <a onclick="shareOnLine()">
-                <i class="fab fa-line"></i>
-                <span>Share on Line</span>
-            </a>
-            <a onclick="shareOnFacebook()">
-                <i class="fab fa-facebook"></i>
-                <span>Share on Facebook</span>
-            </a>
-            <a onclick="shareOnTwitter()">
-                <i class="fab fa-twitter"></i>
-                <span>Share on Twitter</span>
-            </a>
-            <a onclick="shareOnBluesky()">
-                <i class="fa-brands fa-bluesky"></i>
-                <span>Share on Bluesky</span>
-            </a>
-            <a onclick="shareOnMastodon()">
-                <i class="fab fa-mastodon"></i>
-                <span>Share on Mastodon</span>
-            </a>
-            <a onclick="shareOnInstagram()">
-                <i class="fab fa-instagram"></i>
-                <span>Share on Instagram</span>
-            </a>
-            <a onclick="shareOnTumblr()">
-                <i class="fab fa-tumblr"></i>
-                <span>Share on Tumblr</span>
-            </a>
-            <a onclick="shareOnPinterest()">
-                <i class="fab fa-pinterest"></i>
-                <span>Share on Pinterest</span>
-            </a>
-            <a onclick="shareOnReddit()">
-                <i class="fab fa-reddit"></i>
-                <span>Share on Reddit</span>
-            </a>
-            <a onclick="copyPermalink()" class="copy-btn">
-            <i class="fas fa-link"></i>
-            <i class="fas fa-check"></i>
-            <span>Copy Link</span></a>
-            </div>
-            <div id="permalink-text" style="display:none;">https://targetboskval.webcomic.ws/comics/pl/2272441/</div>
-          
-          <a href="/subscribe/" class="share-button" id="comic-sub-btn" title="Click to subscribe" alt="Click to subscribe" data-tooltip="Subscribe for updates"><i class="fa-solid fa-bell"></i></a>
-          
-          <a href="https://comicfury.com/read/targetboskval/comics/2272441" class="share-button" id="infinite-scroll" title="Open Infinite Scroll View" alt="Open Infinite Scroll View" data-tooltip="Open Infinite Scroll View"><i class="fa-solid fa-scroll"></i></a>
-          
-          <a href="/archive/chapters/" class="share-button" id="archive-btn" title="Go to comic archive" alt="Go to comic archive" data-tooltip="Open comic archive"><i class="fa-solid fa-box-archive"></i></a>
-          
-          
-          
-        </div>
-
-            <div class="comic-options">
-                
-            </div>
             
         <div id="comic-navigation">
             
@@ -3680,9 +3610,7 @@ footer li:last-of-type {
                                     </div>
                                 
                                 <span class="commenttext">
-                                    Heyy guys,<br />
-<br />
-Sorry if any of you got notified. This is a test page for me to test whether the navigation buttons are working.
+                                    This is an offline page of the comic page, so most Javascripts and whatnot won't work here unless you have a strong internet connectio
                                 </span>
                                 <div class="clear"></div>
                             </div>
@@ -3804,22 +3732,30 @@ Sorry if any of you got notified. This is a test page for me to test whether the
     
     
     <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-      const topnav = document.querySelector('.topnav');
-      const comicSection = document.querySelector('#comic-section');
-    
-      window.addEventListener('scroll', () => {
-        const sectionTop = comicSection.offsetTop;
-        const sectionHeight = comicSection.offsetHeight;
-        const scrollPosition = window.scrollY + window.innerHeight;
-    
-        if (scrollPosition > sectionTop && scrollPosition < sectionTop + sectionHeight) {
-          topnav.classList.add('black-bg');
-        } else {
-          topnav.classList.remove('black-bg');
-        }
-      });
-    });
+	window.onload = function() {
+	let progressBar = document.querySelector('.progress-bar');
+	let comicTitleBox = document.querySelector('#comic-title-box');
+	  if (progressBar && comicTitleBox) {
+	        window.addEventListener('scroll', () => {
+	            let titleBoxRect = comicTitleBox.getBoundingClientRect();
+	            let totalHeight = comicTitleBox.offsetHeight;
+	            let windowHeight = window.innerHeight;
+	            
+	            // Calculate how much of the comic has been scrolled
+	            let scrolled = -titleBoxRect.top;
+	            let scrollableDistance = totalHeight - windowHeight;
+	            
+	            // Calculate progress percentage
+	            let progress = (scrolled / scrollableDistance) * 100;
+	            
+	            // Ensure progress stays between 0 and 100
+	            progress = Math.min(Math.max(progress, 0), 100);
+	            
+	            // Update progress bar width
+	            progressBar.style.width = progress + '%';
+	        });
+	    }
+	};
     </script>
     
     
