@@ -196,7 +196,6 @@ self.addEventListener('activate', event => {
           // Only delete caches that start with our cache prefixes but aren't in the current version
           const isOurCache = cacheName.startsWith('my-cache-') ||
                            cacheName.startsWith('comic-images-') ||
-                           cacheName.startsWith('html-pages-') ||
                            cacheName.startsWith('fonts-') ||
                            cacheName.startsWith('image-resources-') ||
                            cacheName.startsWith('cdn-js-resources-') ||
