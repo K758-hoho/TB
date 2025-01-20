@@ -61,7 +61,7 @@ const ASSETS_TO_CACHE = [
   { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/websitebg1-693x1232.webp', revision: '1.0' },
   { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/websitebg1-910x1618.webp', revision: '1.0' },
   { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/websitebg1-1080x1920.webp', revision: '1.0' },
-  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/images/karin-kho1.webp', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/IMG_20250120_203001_621.webp', revision: '1.0' },
   { url: 'https://cdn.jsdelivr.net/npm/workbox-sw@7.3.0/build/workbox-sw.min.js', revision: '1.0' },
   { url: 'https://cdn.jsdelivr.net/npm/workbox-core@7.3.0/build/workbox-core.prod.js', revision: '1.0' },
   { url: 'https://cdn.jsdelivr.net/npm/workbox-routing@7.3.0/build/workbox-routing.prod.js', revision: '1.0' },
@@ -83,7 +83,7 @@ workbox.precaching.precacheAndRoute(ASSETS_TO_CACHE.map(asset => ({
   url: asset.url,
   revision: asset.revision
 })), {
-  cacheName: CACHE_NAMES.main // Use the proper cache name
+  cacheName: CACHE_NAMES.main
 });
 
 // Cache Workbox libraries
@@ -97,6 +97,7 @@ const workboxLibraries = [
   'https://cdn.jsdelivr.net/npm/workbox-cacheable-response@7.3.0/build/workbox-cacheable-response.prod.js'
 ];
 
+//Cache Workbox libraries
 workbox.routing.registerRoute(
   ({url}) => workboxLibraries.includes(url.href),
   new workbox.strategies.CacheFirst({
@@ -112,7 +113,7 @@ workbox.routing.registerRoute(
   })
 );
 
-// Cache strategies
+//Cache comic images
 workbox.routing.registerRoute(
   ({ url }) => url.origin === 'https://img.comicfury.com' && url.pathname.includes('/comics/'), 
   new workbox.strategies.StaleWhileRevalidate({
@@ -134,7 +135,7 @@ workbox.routing.registerRoute(
   })
 );
 
-// Cache font files
+//Cache font files
 workbox.routing.registerRoute(
   ({ request }) => request.destination === 'font',
   new workbox.strategies.CacheFirst({
