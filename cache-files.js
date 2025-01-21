@@ -8,7 +8,7 @@ importScripts('https://cdn.jsdelivr.net/npm/workbox-cacheable-response@7.3.0/bui
 
 workbox.setConfig({ debug: true });
 
-const CACHE_VERSION = 'v7';
+const CACHE_VERSION = 'v6';
 
 const CACHE_NAMES = {
   main: `my-cache-${CACHE_VERSION}`,
@@ -69,7 +69,7 @@ const ASSETS_TO_CACHE = [
   { url: 'https://cdn.jsdelivr.net/npm/workbox-precaching@7.3.0/build/workbox-precaching.prod.js', revision: '1.0' },
   { url: 'https://cdn.jsdelivr.net/npm/workbox-expiration@7.3.0/build/workbox-expiration.prod.js', revision: '1.0' },
   { url: 'https://cdn.jsdelivr.net/npm/workbox-cacheable-response@7.3.0/build/workbox-cacheable-response.prod.js', revision: '1.0' },
-  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/all.js', revision: '1.0' },
+  { url: 'https://cdn.jsdelivr.net/gh/K758-hoho/TB@tbjs/all.js', revision: '1.1' },
   { url: 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js', revision: '1.0' },
   { url: 'https://storage.ko-fi.com/cdn/scripts/floating-chat-wrapper.css', revision: '1.0' },
   { url: 'https://storage.ko-fi.com/cdn/cup-border.png', revision: '1.0' },
@@ -79,12 +79,16 @@ const ASSETS_TO_CACHE = [
 ];
 
 // Precache the assets
-workbox.precaching.precacheAndRoute(ASSETS_TO_CACHE.map(asset => ({
-  url: asset.url,
-  revision: asset.revision
-})), {
-  cacheName: CACHE_NAMES.main
-});
+try {
+  workbox.precaching.precacheAndRoute(ASSETS_TO_CACHE.map(asset => ({
+    url: asset.url,
+    revision: asset.revision
+  })), {
+    cacheName: CACHE_NAMES.main // Use the proper cache name
+  });
+} catch (error) { 
+  console.error('Error precaching assets:', error);
+}
 
 // Cache Workbox libraries
 const workboxLibraries = [
@@ -97,7 +101,6 @@ const workboxLibraries = [
   'https://cdn.jsdelivr.net/npm/workbox-cacheable-response@7.3.0/build/workbox-cacheable-response.prod.js'
 ];
 
-//Cache Workbox libraries
 workbox.routing.registerRoute(
   ({url}) => workboxLibraries.includes(url.href),
   new workbox.strategies.CacheFirst({
@@ -113,7 +116,7 @@ workbox.routing.registerRoute(
   })
 );
 
-//Cache comic images
+// Cache strategies
 workbox.routing.registerRoute(
   ({ url }) => url.origin === 'https://img.comicfury.com' && url.pathname.includes('/comics/'), 
   new workbox.strategies.StaleWhileRevalidate({
@@ -135,7 +138,7 @@ workbox.routing.registerRoute(
   })
 );
 
-//Cache font files
+// Cache font files
 workbox.routing.registerRoute(
   ({ request }) => request.destination === 'font',
   new workbox.strategies.CacheFirst({
@@ -149,7 +152,7 @@ workbox.routing.registerRoute(
   })
 );
 
-//Cache all images
+// Cache all images
 workbox.routing.registerRoute(
   ({ url }) => 
     (url.origin === 'https://cdn.jsdelivr.net' || url.origin === 'https://targetboskval.webcomic.ws') && 
@@ -168,7 +171,7 @@ workbox.routing.registerRoute(
   })
 );
 
-//Cache CDN-hosted Javascript files
+// Cache CDN-hosted Javascript files
 workbox.routing.registerRoute(
   ({ url }) => url.origin === 'https://cdn.jsdelivr.net' && url.pathname.endsWith('.js'), 
   new workbox.strategies.StaleWhileRevalidate({ 
@@ -196,12 +199,12 @@ self.addEventListener('activate', event => {
         cacheNames.map(cacheName => {
           // Only delete caches that start with our cache prefixes but aren't in the current version
           const isOurCache = cacheName.startsWith('my-cache-') ||
-                           cacheName.startsWith('comic-images-') ||
-                           cacheName.startsWith('fonts-') ||
-                           cacheName.startsWith('image-resources-') ||
-                           cacheName.startsWith('cdn-js-resources-') ||
-                           cacheName.startsWith('workbox-libraries-');
-                           
+                             cacheName.startsWith('comic-images-') ||
+                             cacheName.startsWith('fonts-') ||
+                             cacheName.startsWith('image-resources-') ||
+                             cacheName.startsWith('cdn-js-resources-') ||
+                             cacheName.startsWith('workbox-libraries-');
+                             
           const isOldVersion = !currentCacheNames.includes(cacheName);
           
           if (isOurCache && isOldVersion) {
