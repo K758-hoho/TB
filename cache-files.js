@@ -8,7 +8,7 @@ importScripts('https://cdn.jsdelivr.net/npm/workbox-cacheable-response@7.3.0/bui
 
 workbox.setConfig({ debug: true });
 
-const CACHE_VERSION = 'v6';
+const CACHE_VERSION = 'v8';
 
 const CACHE_NAMES = {
   main: `my-cache-${CACHE_VERSION}`,
