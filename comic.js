@@ -105,3 +105,67 @@ function copyPermalink() {
         }, 2000);
     });
 }
+
+/*Comic Reading Progress*/
+window.onload = function() {
+    let progressBar = document.querySelector('.progress-bar');
+    let comicTitleBox = document.querySelector('#comic-title-box');
+    
+    if (progressBar && comicTitleBox) {
+        window.addEventListener('scroll', () => {
+            let titleBoxRect = comicTitleBox.getBoundingClientRect();
+            let totalHeight = comicTitleBox.offsetHeight;
+            let windowHeight = window.innerHeight;
+            
+            // Calculate how much of the comic has been scrolled
+            let scrolled = -titleBoxRect.top;
+            let scrollableDistance = totalHeight - windowHeight;
+            
+            // Calculate progress percentage
+            let progress = (scrolled / scrollableDistance) * 100;
+            
+            // Ensure progress stays between 0 and 100
+            progress = Math.min(Math.max(progress, 0), 100);
+            
+            // Update progress bar width
+            progressBar.style.width = progress + '%';
+        });
+    }
+};
+
+
+/*Current Comic Progress*/
+document.addEventListener('DOMContentLoaded', function() {
+    var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1alCVHZ40GNE7H7d_o-LnPShoQs40sZRDgxG-7u_ZAMQ/gviz/tq?tqx=out:csv&sheet=Database';
+
+    function init() {
+        Papa.parse(public_spreadsheet_url, {
+            download: true,
+            header: true,
+            complete: showInfo
+        });
+    }
+
+    function showInfo(results) {
+        var data = results.data;
+        // Wait for elements to be available
+        const progress = document.querySelector('#progress');
+        const percentageText = document.querySelector('#percentageText');
+        const stage = document.querySelector('#stage');
+        const currentChapter = document.querySelector('#currentChapter');
+
+        // Check if elements exist before proceeding
+        if (progress && percentageText && stage && currentChapter) {
+            data.forEach(function(data) {
+                progress.style.width = data.Progress;
+                percentageText.innerHTML = data.Progress;
+                stage.innerHTML = data.CurrentStage;
+                currentChapter.innerHTML = data.CurrentChapter;
+                stage.style.opacity = 1;
+                currentChapter.style.opacity = 1;
+            });
+        }
+    }
+
+    init();
+});
